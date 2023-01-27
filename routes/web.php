@@ -24,7 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('received-datatable', [DashboardController::class,'datatable'])->name('receivedDatatable');
     Route::post('web-logout', [AuthenticateController::class,'webLogout'])->name('WebLogout');
     Route::resource('terminals', TerminalActionController::class);
-    Route::get('terminal-delete/{$id}', [TerminalActionController::class,'delete'])->name('terminal.delete');
+    //Route::get('terminals/destroy/{$id}', [TerminalActionController::class,'destroy']);
     Route::post('terminals-datatable', [TerminalActionController::class, 'datatable'])->name('terminalsDatatable');
 });
 

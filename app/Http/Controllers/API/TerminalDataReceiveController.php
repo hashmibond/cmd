@@ -57,9 +57,11 @@ class TerminalDataReceiveController extends Controller
                 ]);
             }*/
             DB::commit();
-            return response()->json('successfully added');
+            return response()->json([
+                'status' => true,
+                'message' => 'successfully added'
+            ], 200);
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             return response()->json([
                 'status' => false,

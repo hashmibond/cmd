@@ -19,28 +19,33 @@ class TerminalController extends Controller
             $user_terminal_list= TerminalAction::where('user_id',Auth::user()->id)->get();
             return response()->json([
                 'status' => true,
-                'message' => 'success',
+                'message' => 'Successfully data fetch',
                 'data' => $user_terminal_list
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => /*'something went wrong'*/$th->getMessage()
+                'message' => 'something went wrong!'/* $th->getMessage()*/
             ], 500);
         }
     }
     public function show($id)
     {
         try {
-            $terminal= TerminalAction::find($id)->first();
+            $terminal= TerminalAction::select('terminal_actions.*','terminals.shutter_sensor_status','terminals.shutter_sensor_updated_at',
+                                            'terminals.smoke_sensor_status','terminals.smoke_sensor_updated_at','terminals.gas_sensor_status','terminals.gas_sensor_updated_at',
+                                            'terminals.motion_sensor_status','terminals.motion_sensor_updated_at')
+                                        ->leftjoin('terminals', 'terminal_actions.id', '=', 'terminals.terminal_id')
+                                        ->where([['terminal_actions.id',$id],['terminal_actions.user_id',Auth::user()->id]])->first();
             return response()->json([
                 'status' => true,
+                'message' => 'Successfully data fetch',
                 'data' => $terminal
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'/*$th->getMessage()*/
+                'message' => 'something went wrong!'/* $th->getMessage()*/
             ], 500);
         }
     }
@@ -90,26 +95,33 @@ class TerminalController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => false,
-                'message' => /*'something went wrong'*/$th->getMessage()
+                'message' => 'something went wrong!'/* $th->getMessage()*/
             ], 500);
         }
 
     }
 
-    public function terminalActivities(Request $request)
+    public function terminalActivities(Request $request,$id)
     {
         try {
-            $terminal_info=TerminalAction::find($request->id);
-            $offset=$request->offset ? $request->offset : 15;
-            $terminal_activities=TerminalDataReceive::Where('reg_no',$terminal_info->reg_no)->latest()->paginate($offset);
+            $terminal_info=TerminalAction::where([['terminal_actions.id',$id],['terminal_actions.user_id',Auth::user()->id]])->first();
+            if ($terminal_info){
+                $offset= $request->offset ? $request->offset : 15;
+                $terminal_activities=TerminalDataReceive::Where('reg_no',$terminal_info->reg_no)->latest()->paginate($offset);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Successfully data fetch',
+                    'data' => $terminal_activities
+                ], 200);
+            }
             return response()->json([
-                'status' => true,
-                'data' => $terminal_activities
-            ], 200);
+                'status' => false,
+                'message' => 'This terminal doesn\'t belongs to this user',
+            ], 403);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => /*'something went wrong'*/$th->getMessage()
+                'message' => 'something went wrong'/*$th->getMessage()*/
             ], 500);
         }
     }

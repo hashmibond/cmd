@@ -31,7 +31,7 @@ class AuthenticateController extends Controller
                 }
                 return response()->json([
                     'status' => true,
-                    'message' => 'User Logged In Successfully',
+                    'message' => 'User logged in successfully',
                     'access_token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,
                 ], 200);
             }
@@ -47,7 +47,7 @@ class AuthenticateController extends Controller
                 }
                 return response()->json([
                     'status' => true,
-                    'message' => 'User Logged In Successfully',
+                    'message' => 'User logged in successfully',
                     'access_token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,
                 ], 200);
             }
@@ -59,7 +59,7 @@ class AuthenticateController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -70,12 +70,12 @@ class AuthenticateController extends Controller
             Auth::user()->tokens()->where('id', Auth::user()->currentAccessToken()->id)->delete();
             return response()->json([
                 'status' => true,
-                'message' => 'User Logged Out Successfully',
+                'message' => 'User logged out successfully',
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -87,7 +87,7 @@ class AuthenticateController extends Controller
             if (!$user_info){
                 return response()->json([
                     'status' => false,
-                    'message' => 'user not found'
+                    'message' => 'User not found!'
                 ], 404);
             }
             RegisterAccessToken::where('phone', $request->phone)->delete();
@@ -107,8 +107,7 @@ class AuthenticateController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
-                /*'message' => $th->getMessage()*/
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -134,8 +133,25 @@ class AuthenticateController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
-                /*'message' => $th->getMessage()*/
+                'message' => 'something went wrong!'/* $th->getMessage()*/
+            ], 500);
+        }
+    }
+
+    public function updateFcm(Request $request){
+        try {
+            $request->validate([
+                'token' => 'required',
+            ]);
+            User::find(Auth::user()->id)->update(['fcm_token'=>$request->token]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully updated'
+            ], 200);
+        }catch (\Throwable $th){
+            return response()->json([
+                'status' => false,
+                'message' => 'something went wrong!'/* $th->getMessage()*/
             ], 500);
         }
     }

@@ -17,6 +17,7 @@ class AuthenticateController extends Controller
         return view('auth.login');
 
     }
+
     public function webLogin(WebLoginRequest $request)
     {
         try {

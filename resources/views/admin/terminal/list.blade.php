@@ -1,7 +1,10 @@
 @extends('admin.layouts.master')
 
 @section('content')
+    @php
+        use Illuminate\Support\Facades\Session;
 
+    @endphp
     <div class="page-heading row">
         <div class="col-md-6">  <h1 class="page-title">Terminal</h1></div>
             <div class="col-md-6"><a class="btn btn-info float-right mt-4" href="{{ route('terminals.create') }}" > <i class="fa fa-plus"></i> Create</a></div>
@@ -86,5 +89,39 @@
                 ]
             });
         })
+
+        // Delete record
+        $('#item-table').on('click','.deleteUser',function(){
+            var id = $.trim($(this).data('id'));
+console.log($.trim(id));
+            var deleteConfirm = confirm("Are you sure?");
+            if (deleteConfirm == true) {
+                // AJAX request
+                $.ajax({
+                    url: "terminals/destroy/",
+                    type: 'get',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        id: id,
+                        /*_method: 'DELETE'*/
+                    },
+                    dataType: 'json',
+                    success: function(response){
+                        if(response.success == 1){
+                            alert("Record deleted.");
+
+                            // Reload DataTable
+                            empTable.ajax.reload();
+                        }else{
+                            alert("Invalid ID.");
+                        }
+                    }
+                });
+            }
+
+        });
+
     </script>
 @endpush

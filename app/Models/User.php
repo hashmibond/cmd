@@ -18,7 +18,7 @@ class User extends Authenticatable
         return $date->format('Y-m-d H:i:s');
     }
 
-    protected $fillable = ['name', 'email', 'phone', 'address','image', 'password', 'role_id'];
+    protected $fillable = ['name', 'email', 'phone', 'address','image', 'password', 'role_id','fcm_token'];
 
     protected $hidden = [
         'password',

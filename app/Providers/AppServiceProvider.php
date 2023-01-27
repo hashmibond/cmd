@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(terminalActionsRepositoryInterface::class,terminalActionsRepository::class);
+        //$this->app->bind(terminalActionsRepositoryInterface::class,terminalActionsRepository::class);
     }
 
     /**

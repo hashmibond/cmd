@@ -50,6 +50,8 @@ class TerminalActionController extends Controller
                     return '<a href=" ' . route('terminals.edit', $terminalAction->id) . ' " class="btn btn-default btn-xs m-r-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil font-14"></i></a>';
                 } else {
                     return "<a href=\" " . route('terminals.edit', $terminalAction->id) . " \" class=\"btn btn-default btn-xs m-r-5\"  data-toggle=\"tooltip\" data-original-title=\"Edit\"><i class=\"fa fa-pencil font-14\"></i></a>
+
+                        <button data-id=\" $terminalAction->id \" class=\"btn btn-default btn-xs m-r-5 deleteUser \" data-original-title=\"Delete\"><i class=\"fa fa-trash-o font-14\"></i></button>
                         ";
                 }*/
                 return '<a href=" ' . route('terminals.edit', $terminalAction->id) . ' " class="btn btn-default btn-xs m-r-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil font-14"></i></a>';
@@ -114,6 +116,10 @@ class TerminalActionController extends Controller
 
     public function destroy($id)
     {
+        /*return response()->json([
+            'status' => true,
+            'message' => $id
+        ], 200);*/
         try {
             $terminalAction= TerminalAction::find($id);
             if (!$terminalAction->user_id){

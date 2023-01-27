@@ -34,8 +34,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
-                /*'message' => $th->getMessage()*/
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -48,6 +47,7 @@ class UserController extends Controller
             if (!$auth_info || $auth_info->otp!=$request->otp){
                 return response()->json([
                     'status' => false,
+                    'message' => 'Unauthenticated!'
                 ], 401);
             }
             $input = $request->all();
@@ -69,14 +69,13 @@ class UserController extends Controller
             $auth_info->delete();
             return response()->json([
                 'status' => true,
-                'message' => 'User Created and Logged In Successfully',
+                'message' => 'User created and logged nn successfully',
                 'access_token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
-                /*'message' => $th->getMessage()*/
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -87,12 +86,13 @@ class UserController extends Controller
             /*$image_path= baseUrl().'/images/user/'.$user_info->image;*/
             return response()->json([
                 'status' => true,
+                'message' => 'Successfully data fetch',
                 'data' => $user_info
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }
@@ -128,7 +128,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {/*dd($th->getMessage());*/
             return response()->json([
                 'status' => false,
-                'message' => 'something went wrong'
+                'message' => 'something went wrong!'/*$th->getMessage()*/
             ], 500);
         }
     }

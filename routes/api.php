@@ -27,7 +27,6 @@ Route::group(['prefix'=>'auth'], function(){
     Route::post('login', [AuthenticateController::class, 'login']);
     Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::post('logout', [AuthenticateController::class, 'logout']);
-        Route::post('terminals-actions', [TerminalActionController::class, 'update']);
     });
 });
 /*-----------------------------------user routes-------------------------------------*/
@@ -37,9 +36,10 @@ Route::group(['prefix'=>'user'], function(){
     Route::post('forgot-password', [AuthenticateController::class, 'forgotPassword']);
     Route::post('reset-password', [AuthenticateController::class, 'resetPassword']);
     Route::group(['middleware' => 'auth:sanctum'], function(){
+        Route::post('fcm', [AuthenticateController::class,'updateFcm']);
         Route::apiResource('terminals', TerminalController::class);
         Route::post('terminal-register', [TerminalController::class,'terminalRegister']);
-        Route::get('terminal-activities', [TerminalController::class, 'terminalActivities']);
+        Route::get('terminals/{id}/activities', [TerminalController::class, 'terminalActivities']);
         Route::get('show-profile', [UserController::class, 'userProfile']);
         Route::post('update-profile', [UserController::class, 'updateProfile']);
     });
