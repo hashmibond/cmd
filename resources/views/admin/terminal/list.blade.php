@@ -44,6 +44,15 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                {{--<div class="col-sm-3 form-group" >
+                                    <label>Terminals: </label>
+                                    <select name="regStatus" class="form-control" id="terminalId">
+                                        <option value="">All</option>
+                                        @foreach ($terminalList as $terminal)
+                                            <option value="{{ $terminal->id }}" {{ (request('terminalId') == $terminal->id) ? 'selected' : '' }} >{{ $terminal->reg_no }} ({{ $terminal->customer->CustomerName }})</option>
+                                        @endforeach
+                                    </select>
+                                </div>--}}
                                 <div class="form-group col-sm-6 text-left ">
                                     <button class="btn btn-info d-none" type="submit" name="download">Download</button>
                                 </div>
@@ -102,7 +111,7 @@
         $(function() {
             $('.date').datepicker({
                 autoclose: true,
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
             });
             $("#terminalId").select2();
             $('#item-table').DataTable({
