@@ -29,9 +29,9 @@ class CreateAccountRequest extends FormRequest
             'otp' => 'required|max:4',
             'name' => 'required|max:50',
             /*'phone' => 'required|max:11|unique:users,phone',*/
-            'address' => 'required|max:250',
+            'address' => 'nullable|max:250',
             'email' => 'nullable|email|max:50|unique:users,email',
-            'password' => 'required|string|min:4|max:4|confirmed',
+            'password' => 'required|string|min:4|confirmed',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20480',
         ];
     }

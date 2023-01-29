@@ -32,7 +32,7 @@ class AuthenticateController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'User logged in successfully',
-                    'access_token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,
+                    'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,],
                 ], 200);
             }
             /*----------------------for phone login------------------------*/

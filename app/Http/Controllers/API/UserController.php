@@ -70,7 +70,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'User created and logged nn successfully',
-                'access_token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,
+                'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,]
             ], 200);
         } catch (\Throwable $th) {
             return response()->json([

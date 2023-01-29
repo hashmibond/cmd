@@ -22,10 +22,10 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required','max:50',
-            'phone' => 'required','max:11',Rule::unique(User::class)->ignore($this->user()->id),
-            'email' => 'required','max:50',Rule::unique(User::class)->ignore($this->user()->id),
-            'address' => 'required','max:250',
+            'name' => 'nullable','max:50',
+            'phone' => 'nullable','max:11',Rule::unique(User::class)->ignore($this->user()->id),
+            'email' => 'nullable','max:50',Rule::unique(User::class)->ignore($this->user()->id),
+            'address' => 'nullable','max:250',
             'password' => 'nullable', 'string', 'min:4', 'max:4', 'confirmed',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:20480',
         ];
