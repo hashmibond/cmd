@@ -10,8 +10,10 @@
 <!-- PAGE LEVEL PLUGINS-->
 <script src="{{asset('./assets/vendors/DataTables/datatables.min.js')}}" type="text/javascript"></script>
 <script src="{{asset('assets/js/toastr.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/js/bootstrap-datepicker.min.js')}}" type="text/javascript"></script>
 <!-- CORE SCRIPTS-->
 <script src="{{asset('assets/js/app.min.js')}}" type="text/javascript"></script>
+<script src="{{asset('assets/js/select2.min.js')}}" type="text/javascript"></script>
 <!-- PAGE LEVEL SCRIPTS-->
 {!! Toastr::message() !!}
 

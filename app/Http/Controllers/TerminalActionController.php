@@ -15,18 +15,34 @@ use Session;
 class TerminalActionController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $terminals = DB::table('terminal_actions')->select('terminal_actions.*','users.name as userName')
+        $StartDate =  $request->has('StartDate') ? $request->StartDate : date('Y-m-d');
+        $EndDate = $request->has('EndDate') ? $request->EndDate : date('Y-m-d');
+
+        $terminalList= TerminalAction::all();
+
+        /*$terminals = DB::table('terminal_actions')->select('terminal_actions.*','users.name as userName')
                         ->leftJoin('users','users.id','=','terminal_actions.user_id')
-                        ->get();;
-        return view('admin.terminal.list',compact('terminals'));
+                        ->whereBetween('approved_at', [$StartDate . ' 00:00:00', $EndDate . ' 23:59:59'])
+                        ->when($request->terminalId, function ($query) use($request) {
+                            $query->where('terminal_actions.id', $request->terminalId);
+                        })
+                        ->get();*/
+        //dd($request->all(),$StartDate,$EndDate,$terminals);
+        return view('admin.terminal.list',compact('terminalList','StartDate','EndDate'));
     }
 
     public function datatable(Request $request)
     {
+        $StartDate =  $request->has('StartDate') ? $request->StartDate : date('Y-m-d');
+        $EndDate = $request->has('EndDate') ? $request->EndDate : date('Y-m-d');
         $Query = TerminalAction::select('terminal_actions.*','users.name as userName')
                 ->leftJoin('users','users.id','=','terminal_actions.user_id')
+                ->whereBetween('terminal_actions.approved_at', [$StartDate . ' 00:00:00', $EndDate . ' 23:59:59'])
+                ->when($request->terminalId, function ($query) use($request) {
+                    $query->where('terminal_actions.id', $request->terminalId);
+                })
                 ->orderBy('terminal_actions.id', 'desc')
                 ->get();
         return DataTables::of($Query)
