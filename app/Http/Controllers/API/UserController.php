@@ -123,7 +123,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Profile updated successfully',
-                'data' => User::where('phone',$request->phone)->first()
+                'data' => User::where('id',Auth::user()->id)->first()
             ], 200);
         } catch (\Throwable $th) {/*dd($th->getMessage());*/
             return response()->json([
