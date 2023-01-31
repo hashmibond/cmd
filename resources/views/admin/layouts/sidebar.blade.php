@@ -19,6 +19,11 @@
                     <span class="nav-label">Terminals</span>
                 </a>
             </li>
+            <li>
+                <a class="{{ (request()->routeIs('users*')) ? 'active' : '' }}" href="{{ route('users.index')}}"><i class="sidebar-item-icon fa fa-user-circle-o"></i>
+                    <span class="nav-label">Users</span>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>

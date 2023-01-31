@@ -3,6 +3,7 @@
 use App\Http\Controllers\TerminalActionController;
 use App\Http\Controllers\AUTH\AuthenticateController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('terminals', TerminalActionController::class);
     //Route::get('terminals/destroy/{$id}', [TerminalActionController::class,'destroy']);
     Route::post('terminals-datatable', [TerminalActionController::class, 'datatable'])->name('terminalsDatatable');
+    Route::resource('users', UserController::class);
+    Route::post('users-datatable', [UserController::class, 'datatable'])->name('usersDatatable');
 });
 
 

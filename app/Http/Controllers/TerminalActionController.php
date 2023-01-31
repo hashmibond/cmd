@@ -20,9 +20,7 @@ class TerminalActionController extends Controller
         /*$StartDate =  $request->has('StartDate') ? $request->StartDate : now()->modify('-30 day')->format('Y-m-d');*/
         $StartDate =  $request->has('StartDate') ? $request->StartDate : null;
         $EndDate = $request->has('EndDate') ? $request->EndDate : null;
-
         $terminalList= TerminalAction::all();
-
         /*$terminals = DB::table('terminal_actions')->select('terminal_actions.*','users.name as userName')
                         ->leftJoin('users','users.id','=','terminal_actions.user_id')
                         ->whereBetween('terminal_actions.approved_at', [$StartDate . ' 00:00:00', $EndDate . ' 23:59:59'])
@@ -30,56 +28,30 @@ class TerminalActionController extends Controller
                             $query->where('terminal_actions.id', $request->terminalId);
                         })
                         ->get();*/
-
         //dd($request->all(),$StartDate,$EndDate,$terminals);
         return view('admin.terminal.list',compact('terminalList','StartDate','EndDate'));
     }
 
     public function datatable(Request $request)
     {
-        /*$StartDate =  $request->has('StartDate') ? $request->StartDate : now()->modify('-30 day')->format('Y-m-d');
-        $EndDate = $request->has('EndDate') ? $request->EndDate : date('Y-m-d');*/
         $Query = TerminalAction::select('terminal_actions.*','users.name as userName')
                 ->leftJoin('users','users.id','=','terminal_actions.user_id')
-                //->whereBetween('terminal_actions.approved_at', [$StartDate . ' 00:00:00', $EndDate . ' 23:59:59'])
                 ->when(request()->StartDate, function ($query, $StartDate) {
-                    $query->where('terminal_actions.approved_at', '>=', $StartDate . ' 00:00:00');
-                })
+                    $query->where('terminal_actions.approved_at', '>=', $StartDate . ' 00:00:00');})
                 ->when(request()->EndDate, function ($query, $EndDate) {
-                    $query->where('terminal_actions.approved_at', '<=', $EndDate .  ' 23:59:59');
-                })
+                    $query->where('terminal_actions.approved_at', '<=', $EndDate .  ' 23:59:59');})
                 ->when(request()->terminalId, function ($query) use($request) {
-                    $query->where('terminal_actions.id', $request->terminalId);
-                    /*if ($request->terminalId===-1){
-                        $query->where('terminal_actions.is_approved', 0);
-                    }
-                    else{
-                        $query->where('terminal_actions.id', $request->terminalId);
-                    }*/
-                })
-                /*->when($request->terminalId, function ($query) use($request) {
-                    $query->where('terminal_actions.id', $request->terminalId);
-                })*/
-
-                ->orderBy('terminal_actions.id', 'desc')
-                ->get();
+                    $query->where('terminal_actions.id', $request->terminalId);})
+                ->latest()->get();
         //dd(DataTables::of($Query));
         return DataTables::of($Query)
             ->addIndexColumn()
             ->addColumn('status', function(TerminalAction $terminalAction) {
-                if ($terminalAction->status) {
-                    return '<span class="badge badge-success">Active</span>';
-                } else {
-                    return '<span class="badge badge-danger">Inactive</span>';
-                }
-            })
+                if ($terminalAction->status) { return '<span class="badge badge-success">Active</span>';}
+                else { return '<span class="badge badge-danger">Inactive</span>';}})
             ->addColumn('is_approved', function(TerminalAction $terminalAction) {
-                if ($terminalAction->is_approved) {
-                    return '<span class="badge badge-success">Active</span>';
-                } else {
-                    return '<span class="badge badge-danger">Inactive</span>';
-                }
-            })
+                if ($terminalAction->is_approved) {return '<span class="badge badge-success">Active</span>';}
+                else { return '<span class="badge badge-danger">Inactive</span>';}})
             ->addColumn('actions', function(TerminalAction $terminalAction) {
                 /*if($terminalAction['user_id']) {
                     return '<a href=" ' . route('terminals.edit', $terminalAction->id) . ' " class="btn btn-default btn-xs m-r-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil font-14"></i></a>';
