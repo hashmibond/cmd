@@ -19,8 +19,8 @@ class AuthenticateController extends Controller
     public function login(LoginRequest $request)
     {
         try {
-            $user= User::Where('email',$request->identifier)->first();
-            /*----------------------for email login------------------------*/
+            $user= User::Where('email',$request->identifier)->orWhere('phone',$request->identifier)->first();
+
             if ($user && $user->role_id==3){
                 //$credentials=['email' => $request->identifier, 'password' => $request->password,];
                 //if(!Auth::attempt($credentials)){
@@ -36,22 +36,6 @@ class AuthenticateController extends Controller
                     'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,],
                 ], 200);
             }
-            /*----------------------for phone login------------------------*/
-            $user= User::Where('phone',$request->identifier)->first();
-            if ($user && $user->role_id==3){
-                if(!Hash::check($request->password, $user->password)){
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'These credentials do not match our records.',
-                    ], 401);
-                }
-                return response()->json([
-                    'status' => true,
-                    'message' => 'User logged in successfully',
-                    'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,],
-                ], 200);
-            }
-
             return response()->json([
                 'status' => false,
                 'message' => 'These credentials do not match our records.',
@@ -93,7 +77,7 @@ class AuthenticateController extends Controller
             RegisterAccessToken::where('phone', $request->phone)->delete();
             $token=Str::random(40);
             $otp=rand(1000,9999);
-            $forgot_credentials=RegisterAccessToken::create([
+            RegisterAccessToken::create([
                 'phone' => $request->phone,
                 'token' => $token,
                 'otp' => $otp
