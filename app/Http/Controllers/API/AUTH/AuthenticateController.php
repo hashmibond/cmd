@@ -22,8 +22,9 @@ class AuthenticateController extends Controller
             $user= User::Where('email',$request->identifier)->first();
             /*----------------------for email login------------------------*/
             if ($user && $user->role_id==3){
-                $credentials=['email' => $request->identifier, 'password' => $request->password,];
-                if(!Auth::attempt($credentials)){
+                //$credentials=['email' => $request->identifier, 'password' => $request->password,];
+                //if(!Auth::attempt($credentials)){
+                if(!Hash::check($request->password, $user->password)){
                     return response()->json([
                         'status' => false,
                         'message' => 'These credentials do not match our records.',
@@ -38,8 +39,7 @@ class AuthenticateController extends Controller
             /*----------------------for phone login------------------------*/
             $user= User::Where('phone',$request->identifier)->first();
             if ($user && $user->role_id==3){
-                $credentials=['email' => $user->email, 'password' => $request->password,];
-                if(!Auth::attempt($credentials)){
+                if(!Hash::check($request->password, $user->password)){
                     return response()->json([
                         'status' => false,
                         'message' => 'These credentials do not match our records.',
