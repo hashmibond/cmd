@@ -4,8 +4,13 @@
 
     <div class="page-content fade-in-up">
         <div class="ibox">
-            <div class="ibox-head">
-                <div class="ibox-title">Terminal Data</div>
+            <div class="ibox-head row">
+                <div class="ibox-title col-sm-3">Terminal Data</div>
+                <form action="{{ route('Dashboard') }}" class="col-sm-3 text-right p-2 ">
+                    <div class="form-group ">
+                        <button class="btn btn-info" type="submit" name="download">Download</button>
+                    </div>
+                </form>
             </div>
             <div class="ibox-body">
                 <div class="table-responsive">

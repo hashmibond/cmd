@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TerminalReceivedDataExport;
 use App\Models\TerminalDataReceive;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\DataTables;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $terminalAllData=TerminalDataReceive::orderBy('id', 'DESC')->get();
-        return view('admin.dashboard',compact('terminalAllData'));
+        if($request->has('download')){
+            return Excel::download(new TerminalReceivedDataExport($request), "terminal_received_data_" . date('d_m_Y_H_i_s') . ".xlsx");
+        }
+        return view('admin.dashboard');
     }
 
     public function datatable(Request $request)
