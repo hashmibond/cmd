@@ -44,17 +44,8 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                {{--<div class="col-sm-3 form-group" >
-                                    <label>Terminals: </label>
-                                    <select name="regStatus" class="form-control" id="terminalId">
-                                        <option value="">All</option>
-                                        @foreach ($terminalList as $terminal)
-                                            <option value="{{ $terminal->id }}" {{ (request('terminalId') == $terminal->id) ? 'selected' : '' }} >{{ $terminal->reg_no }} ({{ $terminal->customer->CustomerName }})</option>
-                                        @endforeach
-                                    </select>
-                                </div>--}}
                                 <div class="form-group col-sm-6 text-left ">
-                                    <button class="btn btn-info d-none" type="submit" name="download">Download</button>
+                                    <button class="btn btn-info" type="submit" name="download">Download</button>
                                 </div>
                                 <div class="form-group col-sm-6 text-right" style="float: right!important;">
                                     <a class="btn btn-outline-default" href="{{ route('terminals.index') }}" type="submit">Refresh</a>
