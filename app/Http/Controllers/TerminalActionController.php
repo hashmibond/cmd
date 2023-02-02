@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TerminalExport;
 use App\Http\Requests\StoreTerminalActionRequest;
 use App\Http\Requests\UpdateTerminalActionRequest;
 use App\Models\Terminal;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Toastr;
 use Yajra\DataTables\DataTables;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TerminalActionController extends Controller
 {
@@ -21,6 +23,9 @@ class TerminalActionController extends Controller
         $StartDate =  $request->has('StartDate') ? $request->StartDate : null;
         $EndDate = $request->has('EndDate') ? $request->EndDate : null;
         $terminalList= TerminalAction::all();
+        if($request->has('download')){
+                return Excel::download(new TerminalExport($request), "terminal_" . date('d_m_Y_H_i_s') . ".xlsx");
+            }
         /*$terminals = DB::table('terminal_actions')->select('terminal_actions.*','users.name as userName')
                         ->leftJoin('users','users.id','=','terminal_actions.user_id')
                         ->whereBetween('terminal_actions.approved_at', [$StartDate . ' 00:00:00', $EndDate . ' 23:59:59'])
