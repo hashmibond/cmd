@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sanctum:prune-expired --hours=24 ')->daily();
+        $schedule->command('terminal:data-archived')->monthly();
         $schedule->call(function () {RegisterAccessToken::where('created_at','<', now()->subHour(2))->delete();})->daily();
     }
 
