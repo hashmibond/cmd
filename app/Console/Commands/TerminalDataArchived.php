@@ -7,6 +7,8 @@ use App\Models\TerminalDataReceive;
 use App\Models\TerminalDataReceiveArchives;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+Use App\Jobs\TerminalData\TerminalDataArchiving;
+Use App\Jobs\TerminalData\TerminalArchivedDataExporting;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -43,19 +45,15 @@ class TerminalDataArchived extends Command
      */
     public function handle()
     {
+        //dd(TerminalDataReceive::where('created_at','<','2023-01-23 00:00:00')->orderBy('id'));
         //dd(now()->modify("first day of last month")->format('Y-m-d').' 00:00:00');
         try {
             if (TerminalDataReceiveArchives::count()!=0){
-                Excel::store(new TerminalReceiveArchivedDataExport, "excels/terminalArchivedData/terminal_data_archived" . date('d_m_Y_H_i_s') . ".xlsx");
-                TerminalDataReceiveArchives::truncate();
+                dispatch(new TerminalArchivedDataExporting());
             }
-            if (TerminalDataReceive::where('created_at','<',now()->modify("first day of last month")->format('Y-m-d').' 00:00:00')->count()!=0){
+            if (TerminalDataReceive::where('created_at','<','2023-01-24 00:00:00')->count()!=0){
                 DB::beginTransaction();
-                TerminalDataReceive::where('created_at','<',now()->modify("first day of last month")->format('Y-m-d').' 00:00:00')->orderBy('id')
-                    ->chunk(5000, function ($terminalDataReceives) {
-                        foreach ($terminalDataReceives as $terminalDataReceive) { TerminalDataReceiveArchives::insert($terminalDataReceive->toArray());}
-                    });
-                TerminalDataReceive::where('created_at','<',now()->modify("first day of last month")->format('Y-m-d').' 00:00:00')->delete();
+                dispatch(new TerminalDataArchiving());
                 DB::commit();
             }
         }catch (\Throwable $th){
