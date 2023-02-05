@@ -33,7 +33,7 @@ class AuthenticateController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'User logged in successfully',
-                    'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(180))->plainTextToken,],
+                    'data' =>['token' => $user->createToken('auth_token',['*'],now()->addMinutes(262800))->plainTextToken,],
                 ], 200);
             }
             return response()->json([
